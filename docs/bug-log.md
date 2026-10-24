@@ -31,3 +31,5 @@ Final retests: lint/typecheck/build passed after the source-text view; all three
 - Homepage retained a pre-hosting disclaimer after deployment. Replaced it with the actual Vercel/private-PostgreSQL/durable-processing status and kept live AI explicitly unverified.
 - A validation-success paragraph ignored the request state. It now distinguishes initial proposals, saved review, pending approval, approved/delivery-failed and completed outcomes.
 - A recent fictional quotation used Quotation Reference, Date, Grand Total and separate Item/Quantity/Unit Price/Line Total labels. Mock-v1 required exact case and pipe item rows. Mock-v2 supports that bounded format with literal per-field evidence; repeated/ambiguous fields remain unavailable. Added the reproducing PDF in dataset v2; existing originals/reviews are preserved.
+
+Follow-up evidence deployment: Prisma migrate deploy timed out acquiring its advisory lock through the pooled connection. Configure Prisma CLI to prefer integration-provided DATABASE_URL_UNPOOLED; application queries continue using pooled DATABASE_URL. No migration reset or data rewrite is involved. Redeploy and verify the resulting build.

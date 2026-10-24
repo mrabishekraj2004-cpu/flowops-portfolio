@@ -30,3 +30,5 @@ See test-results.md for executed checks and source commits. Live AI, OCR, extern
 
 ## Local OneDrive output
 Local Next.js output remains .flowops-runtime; prepare-runtime.mjs links generated build output into a dedicated OS-temp cache on Windows OneDrive. Vercel uses .next, its expected deployment output. Sources and private local database/documents remain inside FlowOps. Rebuild generated output if temp is cleared.
+
+Prisma CLI migrations prefer DATABASE_URL_UNPOOLED from the Neon integration, falling back to DATABASE_URL locally. Application traffic retains pooled DATABASE_URL. Session-level migration advisory locks must not use a transaction pool. No database reset is part of deployment.
