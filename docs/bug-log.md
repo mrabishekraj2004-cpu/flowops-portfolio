@@ -22,3 +22,5 @@ Further observed defects and corrections:
 - OneDrive cloud files reported isSymbolicLink rather than isFile, hiding browser tests. The runner now stages only test source in OS temp; discovery and three browser/HTTP tests passed.
 - OneDrive blocked generated build cleanup with EPERM. An isolated generated-output cache avoids synced build files. Its first layout missed runtime module resolution; a dependency parent was added and the production build passed.
 - Headless Chromium could not render the embedded PDF. An actual parsed-source-text view was added beside the fields, with original PDF access retained; final browser verification is recorded in test-results.md.
+
+Final retests: lint/typecheck/build passed after the source-text view; all three final production HTTP/browser checks passed, including literal original text beside the fields and mobile overflow. Actual screenshots were recaptured and inspected. No unresolved failed mandatory local check remains.

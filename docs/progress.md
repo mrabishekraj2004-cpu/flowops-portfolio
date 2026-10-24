@@ -20,7 +20,9 @@ Separate sibling project: C:/Users/abish/OneDrive/Documents/ChatGPT/FlowOps. Hel
 - [x] Actual screenshots captured/inspected; mobile overflow corrected.
 - [x] Requested documentation and private readable login handover prepared.
 - [x] Separate local Git repository initialized, branch codex/flowops; no remote.
-- [ ] Complete staged secret/exclusion review and local delivery commit.
+- [x] Complete staged secret/exclusion review and local delivery commit.
+
+Verified source snapshot: 55e87be9858c32e299ad5073feb48f4b1a966c35.
 
 ## Next step
-Finish the local delivery snapshot, then use README/user guide and demo script. Public repository ownership/visibility/publication and hosting still require a separate choice. Hosting must include persistent PostgreSQL, private shared storage and a durable worker. Live AI, OCR, external internet delivery and hosted PostgreSQL behavior are unverified. Never fill these gaps with invented links or claims.
+Use the README/user guide and demo script. Local implementation and verification are complete within the stated demonstration scope. Public repository ownership/visibility/publication and hosting still require a separate choice. Hosting must include persistent PostgreSQL, private shared storage and a durable worker. Live AI, OCR, external internet delivery and hosted PostgreSQL behavior are unverified. Never fill these gaps with invented links or claims.

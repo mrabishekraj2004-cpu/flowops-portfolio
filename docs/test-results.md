@@ -1,6 +1,6 @@
 # Actual verification results
 
-Tested application: **FlowOps 1.0.0**, local initial delivery, 24 October 2026. Source commit is recorded in the handover after the local snapshot. No public deployment or live AI access was used.
+Tested application: **FlowOps 1.0.0**, local initial delivery, 24 October 2026. Tested source snapshot: 55e87be9858c32e299ad5073feb48f4b1a966c35. No public deployment or live AI access was used.
 
 ## Environment and boundaries
 
@@ -24,11 +24,12 @@ Windows; Node.js 24.17.0; Next.js 16.4.2; Prisma 7.10.1; PDF.js 6.4.299; pdf-lib
 | Full dependency audit | npm audit --audit-level=high: 0 known vulnerabilities |
 | Signed HTTP receiver check | Valid request 200; repeated event with a new delivery ID 200/duplicate=true; exactly one receiver event |
 | Build trace privacy review | 13 trace manifests inspected; no .local, real .env or credential-file paths found |
+| Staged private-data review | 95 staged files reviewed; actual local/demo/test secrets and excluded paths absent |
 | Screenshot inspection | Actual desktop review/dashboard, run history and mobile screenshots captured and inspected; fictional data only |
 
 ## Core suite scenarios
 
-Authentication/active-role checks; requester isolation and file authorization; role escalation/self-role denial; PDF MIME/signature/size/category checks; extraction schema; required fields; real dates; exact-decimal line/subtotal/tax arithmetic; LKR consistency; missing/unsupported evidence; injected instructions treated as data; provider timeout and controlled failure; explicit human review; immutable original proposals; one/two independent reviewers; self/unauthorized approval denial; repeated/concurrent decisions; one unique Purchase/Outbox; edits invalidate prior approvals; changes/rejection; expired worker lease recovery and stale completion; malformed/image-only retry exhaustion; protected manual retry; manual-entry protection; signed/tampered/expired receiver requests; duplicate receiver effects; retry exhaustion and recovery; public-demo/production diagnostic restrictions and unsafe destination rejection.
+Authentication/role checks; requester isolation and file authorization; role escalation/self-role denial; PDF MIME/signature/size/category checks; extraction schema; required fields; real dates; exact-decimal line/subtotal/tax arithmetic; LKR consistency; missing/unsupported evidence; injected instructions treated as data; provider timeout and controlled failure; explicit human review; immutable original proposals; one/two independent reviewers; self/unauthorized approval denial; repeated/concurrent decisions; one unique Purchase/Outbox; edits invalidate prior approvals; changes/rejection; expired worker lease recovery and stale completion; malformed/image-only retry exhaustion; protected manual retry; manual-entry protection; signed/tampered/expired receiver requests; duplicate receiver effects; retry exhaustion and recovery; public-demo/production diagnostic restrictions and unsafe destination rejection.
 
 The development-only retry scenario executed 503 → 503 → 200 with one purchase and one receiver effect. It was tested in the isolated development core suite. The final production browser run instead verified that the simulation endpoint returns 403 and normal signed notification succeeds. These are distinct checks, not a claim that production diagnostics were enabled.
 
