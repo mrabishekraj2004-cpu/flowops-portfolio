@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npx prisma migrate deploy && npm run build",
+  "crons": [
+    {
+      "path": "/api/worker/recover",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}

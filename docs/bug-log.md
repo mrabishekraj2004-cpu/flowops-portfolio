@@ -24,3 +24,5 @@ Further observed defects and corrections:
 - Headless Chromium could not render the embedded PDF. An actual parsed-source-text view was added beside the fields, with original PDF access retained; final browser verification is recorded in test-results.md.
 
 Final retests: lint/typecheck/build passed after the source-text view; all three final production HTTP/browser checks passed, including literal original text beside the fields and mobile overflow. Actual screenshots were recaptured and inspected. No unresolved failed mandatory local check remains.
+
+2026-10-24 hosted packaging: initial Vercel build compiled and type-checked but packaging expected .next instead of the local OneDrive cache folder. Configure .next on Vercel and preserve .flowops-runtime locally; redeploy and verify before claiming release.

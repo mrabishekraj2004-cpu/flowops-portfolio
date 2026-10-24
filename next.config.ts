@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 import { withWorkflow } from "workflow/next";
 const config: NextConfig = {
-  distDir: ".flowops-runtime",
+  distDir: process.env.VERCEL ? ".next" : ".flowops-runtime",
   outputFileTracingIncludes: {
     "/*": [
       "./src/lib/extract-child.mjs",
