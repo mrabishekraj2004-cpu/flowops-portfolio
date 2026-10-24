@@ -26,3 +26,6 @@ Verified source snapshot: 55e87be9858c32e299ad5073feb48f4b1a966c35.
 
 ## Next step
 Use the README/user guide and demo script. Local implementation and verification are complete within the stated demonstration scope. Public repository ownership/visibility/publication and hosting still require a separate choice. Hosting must include persistent PostgreSQL, private shared storage and a durable worker. Live AI, OCR, external internet delivery and hosted PostgreSQL behavior are unverified. Never fill these gaps with invented links or claims.
+
+2026-10-24 publication: source uploaded and verified at https://github.com/mrabishekraj2004-cpu/flowops-portfolio. Separate Vercel project linked. Free Neon provisioning is blocked by unrecorded marketplace terms acceptance (CLI action_required; installation list empty after user reported acceptance). Hosting is not complete; database, private shared storage and durable processing still require setup and end-to-end verification. See deployment.md.
+

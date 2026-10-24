@@ -12,3 +12,6 @@ playwright-report/
 .runtime-build/
 
 .flowops-runtime/
+
+.vercel
+.env*

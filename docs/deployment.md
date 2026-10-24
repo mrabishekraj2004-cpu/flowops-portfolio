@@ -1,6 +1,6 @@
 # Deployment preparation
 
-No FlowOps remote repository, hosted database, shared document store, worker service or public deployment has been provisioned. HelpDeskFlow's remote and hosted resources remain separate. No service purchase is authorised.
+FlowOps source is published at https://github.com/mrabishekraj2004-cpu/flowops-portfolio (main). A separate Vercel project, abishek-f58a/flowops-portfolio, is linked. No hosted database, shared document store, worker service or public deployment has been provisioned. HelpDeskFlow's remote and hosted resources remain separate. No service purchase is authorised.
 
 ## Local
 Follow README setup. DB 54330, web 3100, dedicated worker. Persistent .local/postgres and .local/documents are private. Explicit seed is development-only. Production build may run locally with npm run build then npm start; keep worker separate. Production disables failure simulation.
@@ -19,3 +19,8 @@ A single VM/container host with private persistent disk plus managed PostgreSQL 
 ## Generated local output
 
 Next.js uses .flowops-runtime. On this Windows OneDrive path, prepare-runtime.mjs creates a link to a dedicated per-project OS-temp build cache with a dependency-resolution parent. Elsewhere it is an ordinary generated project directory. The cache can be regenerated; it is not document storage or a database. Rebuild if the OS clears temp. Only generated contents belong there. Browser test discovery stages test source in OS temp to avoid cloud reparse-point behavior.
+
+## Publication progress — 2026-10-24
+
+Uploaded and verified the source repository, including required documentation, tests and screenshots. The 95 tracked source files passed the actual local/demo/test secret and excluded-path scan. Vercel CLI is authenticated and the separate project is linked. Neon installation requested the free_v3 plan, region cle1, existing application auth preserved, production only, without pulling secrets. Both attempts returned integration_terms_acceptance_required; the user reported acceptance between attempts, but the follow-up installations check returned no marketplace installations. No database was created and no live application is claimed. Continue after acceptance is recorded for team abishek-f58a, then implement and verify shared private storage and durable hosted processing before deployment. Do not rerun provisioning without checking existing resources first.
+
