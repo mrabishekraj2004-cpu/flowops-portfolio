@@ -33,4 +33,4 @@ Verification status is in docs/test-results.md. No public deployment or live AI 
 ## Portfolio corrections — 2026-10-24
 - Corrected the homepage deployment claim and made review guidance depend on request/review/delivery state.
 - Added mock-v2 case-insensitive known labels, Date alias and separately labelled item blocks; retained explicit no-AI/no-OCR/layout limitations and immutable historical proposals.
-- Added dataset v2 and parser/browser regressions. Executed 16 core tests and 24/24 selected field checks with 9/9 validation/rejection outcomes. Local production build passed; live regression verification in progress.
+- Added dataset v2 and parser/browser regressions. Executed 16 core tests and 24/24 selected field checks with 9/9 validation/rejection outcomes. Local production build passed; all four live HTTP/browser regressions passed. The reported label format, completed-state message, deployment copy and visible mock limitations were verified.

@@ -18,6 +18,8 @@ async function signIn(request: APIRequestContext, role: string) {
   const a = accounts[role];
   for (let attempt = 0; attempt < 4; attempt++) {
     const response = await request.post(base + "/api/auth/sign-in/email", {
+      // Retry only transport resets; HTTP failures remain visible to assertions.
+      maxRetries: 2,
       data: { email: a.email, password: a.password },
       headers: { Origin: base },
     });
