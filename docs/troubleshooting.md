@@ -21,3 +21,6 @@ Keep diagnostics free of secrets and uploaded content. Never resolve a problem b
 ## OneDrive and generated files
 
 Windows cloud reparse points can hide tests from file discovery or block cleanup of generated Next.js output. The browser wrapper stages only test source in OS temp. prepare-runtime.mjs uses a project-specific generated cache through the ignored .flowops-runtime directory on OneDrive Windows paths, with a separate dependency link outside the cleaned build folder. Source, credentials, documents and database data remain in FlowOps. No cache directory contains user data. If the OS clears temp, rebuild before npm start. Do not remove the private document/database directories.
+
+## Hosted processing
+If an upload stays Processing, inspect Vercel Workflow and the persisted Job/JobAttempt records. Ensure HOSTED_WORKER=workflow, STORAGE_DRIVER=postgres, exact BETTER_AUTH_URL and enabled Vercel system variables. Failed dispatch is retained in SQL and may wait for the daily recovery trigger. Never start the local worker against the hosted database accidentally. Local passwords do not match hosted accounts. Vercel packaging uses .next; the OneDrive-only cache folder is local.

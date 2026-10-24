@@ -1,31 +1,18 @@
 # FlowOps resumable progress
 
-## Boundary
-Separate sibling project: C:/Users/abish/OneDrive/Documents/ChatGPT/FlowOps. HelpDeskFlow's working tree was checked clean. No HelpDeskFlow source, repository, database or hosting resource changed. No FlowOps remote or hosted resource was provisioned; no paid services used.
+## Current delivery — 24 October 2026
+- Public full application: https://flowops-portfolio.vercel.app.
+- Public source: https://github.com/mrabishekraj2004-cpu/flowops-portfolio, main.
+- Verified hosted application source: 1665eaa55713ecf1e83ed7c1436a855f4b06960f.
+- Separate Vercel project flowops-portfolio and free Neon database flowops-database; HelpDeskFlow source, repository, database and hosting are unchanged.
+- Explicit user approvals received for fictional hosted accounts and public Vercel visitor access. Application login/roles/private documents remain protected. No paid upgrades or live AI calls.
+- Local filesystem storage/dedicated worker retained. Hosted adapter stores private PDFs in PostgreSQL; Vercel Workflow runs the persisted worker through retryable steps. Protected daily recovery is configured.
+- Typecheck, lint, production build and dependency audit passed. 15 core tests passed. All 3 live HTTP/browser tests passed. Additional live two-reviewer/self-approval/concurrent-duplicate final-approval test passed with one purchase/outbox and signed completion.
+- Actual live screenshots and executed evidence updated. See test-results.md, deployment.md and handover.md.
+- Hosted login passwords are private in .local/FlowOps-hosted-login-details.txt; local passwords differ.
 
-## Completed
-- [x] Inspect project boundary; no prior FlowOps found.
-- [x] Prisma/PostgreSQL schema, constraints, migration and explicit private fictional seed.
-- [x] Maintained authentication, server permissions and private file storage interface.
-- [x] PDF parsing, mock/live provider interface, source evidence and honest missing data.
-- [x] Decimal validation, versioned human corrections and immutable originals.
-- [x] Independent one/two-reviewer rules, edit invalidation and one transactional purchase record.
-- [x] Durable worker, leases, bounded retries, recovery and safe administrator retry.
-- [x] Transactional outbox, in-app notifications, signatures, duplicates and controlled test receiver.
-- [x] Role dashboards, upload/review/source-text/PDF views, timeline, run history and administration.
-- [x] Versioned fictional dataset and executed mock evaluation.
-- [x] Fourteen core checks and three final production HTTP/browser checks passed.
-- [x] Database persistence and actual worker process restart verified.
-- [x] Final typecheck, lint, production build and both dependency audits passed.
-- [x] Actual screenshots captured/inspected; mobile overflow corrected.
-- [x] Requested documentation and private readable login handover prepared.
-- [x] Separate local Git repository initialized, branch codex/flowops; no remote.
-- [x] Complete staged secret/exclusion review and local delivery commit.
+## Ongoing maintenance
+Run relevant checks before future changes, update documentation/evidence, scan actual private values before publication, push main and inspect the resulting Vercel deployment. Never reset the database, publish passwords or reuse HelpDeskFlow resources. Keep AI labelled mock until explicitly configured and evaluated. No account provisioning UI, OCR, independent security/load certification or external internet delivery is claimed. Monitor free quotas and retain backups; do not upgrade automatically.
 
-Verified source snapshot: 55e87be9858c32e299ad5073feb48f4b1a966c35.
-
-## Next step
-Use the README/user guide and demo script. Local implementation and verification are complete within the stated demonstration scope. Public repository ownership/visibility/publication and hosting still require a separate choice. Hosting must include persistent PostgreSQL, private shared storage and a durable worker. Live AI, OCR, external internet delivery and hosted PostgreSQL behavior are unverified. Never fill these gaps with invented links or claims.
-
-2026-10-24 publication: source uploaded and verified at https://github.com/mrabishekraj2004-cpu/flowops-portfolio. Separate Vercel project linked. Free Neon provisioning is blocked by unrecorded marketplace terms acceptance (CLI action_required; installation list empty after user reported acceptance). Hosting is not complete; database, private shared storage and durable processing still require setup and end-to-end verification. See deployment.md.
-
+## Resolved setup issues
+Neon terms initially remained unrecorded; the user later supplied Terms Accepted and integration provisioning succeeded. The first Vercel build used the OneDrive-specific output folder and failed packaging; .next on Vercel resolved it. Workflow transitive Zod/Undici advisories were fixed within their existing major versions using package overrides. The local output cache remains .flowops-runtime.

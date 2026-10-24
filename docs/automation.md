@@ -22,3 +22,6 @@ Only non-production, non-public-demo environments with ALLOW_DEV_SIMULATION=true
 
 ## Delivery semantics
 At least once, not exactly once. A receiver may commit before a sender crashes; retry must use the same event ID. External receiver idempotency is that receiver's responsibility. No guarantees are claimed for a destination that ignores event IDs. Database/shared-storage backup, monitoring and worker supervision remain deployment responsibilities.
+
+## Hosted dispatcher
+Local development keeps the separate npm run worker process. The Vercel release uses retryable Vercel Workflow Node steps to call the same SQL worker. Upload/decision routes await durable dispatch, then return while processing continues. The workflow polls pending counts with durable sleeps, bounded at 120 cycles. A protected daily cron dispatches recovery; failed initial dispatch can wait until that run. Jobs/outbox remain persisted and lease-protected independently of workflow execution. Only pending counts enter workflow results, not source documents.

@@ -23,3 +23,6 @@ Administration manages categories, LKR threshold, ordered reviewer pool, webhook
 Automation runs show attempts and terminal failures. Only FAILED work can be retried; manual corrections are protected from extraction overwrite. The controlled receiver shows unique events. In local development, simulate initial failures to demonstrate retries. Diagnostic changes and retries are disabled in public-demo mode.
 
 Original comparison: Source text shows actual selectable text/page numbers from PDF.js, not an AI summary. PDF view and Open original PDF preserve access to the original formatting; browser PDF preview support varies.
+
+## Hosted demo
+Open https://flowops-portfolio.vercel.app. Use the privately supplied hosted account details; local passwords are different. Requester uploads and reviews; the assigned reviewer signs in separately to approve; two reviewers are needed at/above the configured LKR 100,000 threshold. The administrator login stays private. Hosted selectable-text PDFs are at most 4 MB, ten pages and 24,000 characters. The portfolio uses the deterministic mock provider and fictional suppliers.

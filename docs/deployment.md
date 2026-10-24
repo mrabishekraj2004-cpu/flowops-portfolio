@@ -1,26 +1,32 @@
-# Deployment preparation
+# FlowOps hosting
 
-FlowOps source is published at https://github.com/mrabishekraj2004-cpu/flowops-portfolio (main). A separate Vercel project, abishek-f58a/flowops-portfolio, is linked. No hosted database, shared document store, worker service or public deployment has been provisioned. HelpDeskFlow's remote and hosted resources remain separate. No service purchase is authorised.
+Source: https://github.com/mrabishekraj2004-cpu/flowops-portfolio (main).
+Public application: https://flowops-portfolio.vercel.app.
+Separate Vercel project: abishek-f58a/flowops-portfolio. Separate free Neon database: flowops-database, AWS US East 2. HelpDeskFlow resources are not reused.
 
-## Local
-Follow README setup. DB 54330, web 3100, dedicated worker. Persistent .local/postgres and .local/documents are private. Explicit seed is development-only. Production build may run locally with npm run build then npm start; keep worker separate. Production disables failure simulation.
+## Runtime responsibilities
+- Next.js web and authenticated APIs run on Vercel, Node 24.
+- Ordinary Neon PostgreSQL stores application data and private PDFs in PrivateDocument BYTEA rows. The local filesystem adapter remains the default for local development. STORAGE_DRIVER=postgres selects shared hosted storage.
+- HOSTED_WORKER=workflow uses Vercel Workflow. Upload and decision routes await durable dispatch; processing runs in retryable Node steps. The same SQL jobs, leases, attempts and outbox protect replayed work. Only pending counts enter workflow results, not PDFs or credentials.
+- Each workflow checks the queue up to 120 times, with durable two-second sleeps between pending cycles. A bounded run may leave work for another dispatcher; it is not an always-running loop.
+- A daily 03:00 UTC Vercel cron calls /api/worker/recover, authenticated with CRON_SECRET. If initial workflow dispatch fails, pending SQL work remains stored; recovery can be delayed until that daily trigger. Do not promise instant recovery during a platform outage.
+- Parser input is a unique private temporary PDF, deleted after parsing. Temporary disk is never the persistent document store. Parser code, PDF.js and its Linux canvas dependency are explicitly included in the function bundle.
 
-## Hosted requirements
-1. Authorised FlowOps repository and visibility decision, separate from HelpDeskFlow. Inspect existing remote before publication; never force-push or overwrite.
-2. Persistent ordinary PostgreSQL with UTC, backups and a separate migration connection where recommended. Apply versioned migrations; do not use reset/db push over existing data.
-3. Private persistent storage shared by web and worker. Current adapter is filesystem; choose a shared-volume host or implement/test an object-storage adapter before splitting hosts. Never use public/ or ephemeral function disk as persistent storage.
-4. Always-on or supervised durable Node worker using the same database, storage, provider configuration and webhook secret. Do not assume a Next.js web-only deployment runs it.
-5. HTTPS web host, exact auth origin, random secrets, private account provisioning, shared production rate limiting, retention and monitoring. No automatic production seed.
-6. Set PUBLIC_DEMO=true and ALLOW_DEV_SIMULATION=false; keep administrator credentials private. Verify worker restart/recovery and private file access against ordinary hosted PostgreSQL before claiming release.
-7. Optional live AI requires provider account access and potential usage costs; explicitly approve/configure before running it. The mock core requires none.
+## Settings
+DATABASE_URL is provisioned by the Neon integration. BETTER_AUTH_URL is the exact public HTTPS origin. BETTER_AUTH_SECRET, WEBHOOK_SECRET and CRON_SECRET are random private values. EXTRACTION_PROVIDER=mock, PUBLIC_DEMO=true and ALLOW_DEV_SIMULATION=false. No paid AI credentials or service upgrades were used. Vercel system variables were already enabled. Public Vercel visitor access was explicitly approved; application login, roles, private file guards and origin validation remain enabled.
 
-A single VM/container host with private persistent disk plus managed PostgreSQL is compatible with this implementation; separate web/worker containers need shared document storage. Free-plan suitability and costs must be checked with the chosen provider before any resources are created. No hosted URL is invented here.
+## Accounts and migrations
+The user explicitly approved initialization of the new empty database and five fictional accounts. Existing users are never overwritten. Hosted passwords are only in ignored .local/hosted-credentials.json and .local/FlowOps-hosted-login-details.txt. Never publish administrator credentials. There is no automatic production seed. Signup is disabled; use the privately provided demo accounts.
 
-## Generated local output
+The build runs prisma migrate deploy before npm run build. Migrations are versioned and additive; never reset a hosted database. Database backups and retention remain operational responsibilities. GitHub main is connected to Vercel for future deployments; run local checks and inspect the resulting deployment before claiming a release.
 
-Next.js uses .flowops-runtime. On this Windows OneDrive path, prepare-runtime.mjs creates a link to a dedicated per-project OS-temp build cache with a dependency-resolution parent. Elsewhere it is an ordinary generated project directory. The cache can be regenerated; it is not document storage or a database. Rebuild if the OS clears temp. Only generated contents belong there. Browser test discovery stages test source in OS temp to avoid cloud reparse-point behavior.
+## Limits and costs
+The selected database plan is free_v3; Vercel remains Hobby. No purchases are authorized. Uploaded PDFs are limited to 4 MB on Vercel to fit its request/response size; local development retains 5 MB. Maximum ten pages and 24,000 extracted characters. This small fictional portfolio stores PDFs in the database for shared private persistence; it is not a large-document storage service. Monitor database storage and platform quotas; do not upgrade automatically.
 
-## Publication progress — 2026-10-24
+Workflow Hobby includes 50,000 events/month and 1 GB written/month, subject to platform compute and queue allowances: https://vercel.com/docs/workflows/pricing. Free usage is bounded; this is not an unlimited availability promise.
 
-Uploaded and verified the source repository, including required documentation, tests and screenshots. The 95 tracked source files passed the actual local/demo/test secret and excluded-path scan. Vercel CLI is authenticated and the separate project is linked. Neon installation requested the free_v3 plan, region cle1, existing application auth preserved, production only, without pulling secrets. Both attempts returned integration_terms_acceptance_required; the user reported acceptance between attempts, but the follow-up installations check returned no marketplace installations. No database was created and no live application is claimed. Continue after acceptance is recorded for team abishek-f58a, then implement and verify shared private storage and durable hosted processing before deployment. Do not rerun provisioning without checking existing resources first.
+## Verification and known gaps
+See test-results.md for executed checks and source commits. Live AI, OCR, external internet webhook delivery, shared production rate limiting, load testing and independent security review remain unverified/out of scope. Fictional documents only. Check anonymous access denial, role boundaries, private PDFs, source evidence, independent approval, signed delivery, production-disabled diagnostics and mobile layout after a deployment.
 
+## Local OneDrive output
+Local Next.js output remains .flowops-runtime; prepare-runtime.mjs links generated build output into a dedicated OS-temp cache on Windows OneDrive. Vercel uses .next, its expected deployment output. Sources and private local database/documents remain inside FlowOps. Rebuild generated output if temp is cleared.

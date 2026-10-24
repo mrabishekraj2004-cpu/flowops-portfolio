@@ -1,5 +1,25 @@
 # Actual verification results
 
+## Hosted release — 24 October 2026
+
+Verified source: 1665eaa55713ecf1e83ed7c1436a855f4b06960f. Public URL: https://flowops-portfolio.vercel.app. GitHub: https://github.com/mrabishekraj2004-cpu/flowops-portfolio. Vercel reported Ready and assigned the public alias. The first hosted build compiled but failed output packaging; the subsequent .next-on-Vercel fix deployed successfully.
+
+| Check | Executed result |
+| --- | --- |
+| Updated local core suite | 15 passed, 0 failed; fresh isolated database; 14 fictional requests survived stop/reopen |
+| Hosted private storage test | PostgreSQL BYTEA roundtrip, invalid key/file rejection, authenticated shared-storage extraction and deletion passed |
+| Release checks | Typecheck, lint and production build passed; Zod and Undici overrides resolved workflow transitive advisories; production audit reported 0 vulnerabilities |
+| Live HTTP/browser suite | 3 passed, 0 failed against the public Vercel URL using separate private hosted fictional accounts |
+| Live business workflow | Login, private PDF upload, source extraction/evidence, saved human review, one independent approval, unique purchase/outbox, signed controlled notification and Completed state passed |
+| Live permissions/UI | Anonymous access denied; another requester denied access to the request/private PDF; requester administration and reviewer upload denied; wrong origin denied; invalid webhook signature denied; production simulation denied; mobile layout and sign-out passed; no-JavaScript form kept password out of URL |
+| Live high-value verification | Required two distinct reviewers; self-approval 403; first approval kept Pending Approval with no purchase; concurrent duplicate final decisions both 200; exactly two approval decisions, one purchase/outbox and SUCCEEDED delivery with Completed request |
+| Public/recovery access | Landing and login 200; anonymous bootstrap and cron recovery 401 |
+| Screenshots | Captured from the live app; desktop source-review view visually inspected |
+
+The hosted checks use ordinary Neon PostgreSQL and actual Vercel Workflow processing; they are not a production load/concurrency certification. Live AI, OCR, external internet webhook delivery, independent security review and shared production rate limiting remain outside these results. No real supplier or payment was contacted. Hosted operation remains subject to free-plan quotas and daily recovery delay if dispatch fails. No destructive database reset or paid upgrade was performed.
+
+## Initial local delivery (historical)
+
 Tested application: **FlowOps 1.0.0**, local initial delivery, 24 October 2026. Tested source snapshot: 55e87be9858c32e299ad5073feb48f4b1a966c35. No public deployment or live AI access was used.
 
 ## Environment and boundaries

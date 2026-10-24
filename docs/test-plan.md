@@ -7,4 +7,6 @@
 5. Evaluation: npm run evaluate. Report mock and live separately. No live credential means live results remain unverified.
 6. Quality: npm run typecheck, npm run lint, npm run build, npm audit. Inspect actual screenshots before delivery.
 
-Do not reset the demo database or delete user uploads to rerun tests. Core test data is isolated. Browser tests add labelled fictional demonstration records to the local demo only. Do not run tests against real records or a public deployment without a separate test environment.
+Do not reset the demo database or delete user uploads to rerun tests. Core test data is isolated. Browser tests add labelled fictional demonstration records. The owner explicitly approved the new hosted fictional accounts and release verification. Do not run tests against real records or another deployment without authorization.
+
+Hosted release: rerun browser checks with FLOWOPS_TEST_URL and the private hosted credential file. Verify ordinary PostgreSQL-backed private upload/extraction, actual durable workflow completion, owner isolation, reviewer/admin boundaries, production diagnostics denied and anonymous recovery denied. Use fictional documents; never publish credentials or reset production for a test.

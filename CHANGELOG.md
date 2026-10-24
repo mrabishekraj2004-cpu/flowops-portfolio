@@ -24,3 +24,8 @@ Verification status is in docs/test-results.md. No public deployment or live AI 
 - Provisioned a free Neon database; explicit user-approved migration and fictional account setup completed.
 - Added private PostgreSQL PDF storage, temporary parser input cleanup, Vercel Workflow dispatch and daily protected recovery. Hosted upload limit is 4 MB to fit platform request limits; local limit remains 5 MB.
 - Type checking and 15 isolated core tests passed, including private database storage and extraction. Live release verification pending.
+
+## Hosted release verified — 2026-10-24
+- Full app live at https://flowops-portfolio.vercel.app; separate public source repository connected to Vercel.
+- 15 core checks, 3 live browser/HTTP checks and live two-reviewer/duplicate approval verification passed.
+- Updated actual screenshots, deployment/operation/security guides and executed evidence; private login handover remains ignored.

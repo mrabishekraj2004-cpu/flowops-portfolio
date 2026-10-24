@@ -19,7 +19,7 @@ export default function CaseStudy() {
       <h2>How it works</h2>
       <p>
         Next.js serves the interface and protected APIs. Prisma stores records
-        in PostgreSQL. A separate Node worker leases persistent jobs, extracts
+        in PostgreSQL. A durable worker leases persistent jobs, extracts
         selectable PDF text and validates proposed fields. Humans correct and
         approve. The final approval creates exactly one internal record and an
         outbox event in the same transaction.
@@ -35,18 +35,21 @@ export default function CaseStudy() {
       <p>
         No OCR, payments, supplier communication, real orders or multi-currency
         conversion. Local PGlite is a development PostgreSQL-compatible engine;
-        a hosted app needs ordinary persistent PostgreSQL, private shared
-        storage and a separately running worker. Live extraction and a public
-        deployment require separate verification.
+        the hosted demo uses Neon PostgreSQL for records and private PDFs, and
+        Vercel Workflow for queued processing. Live AI, OCR and production load
+        capacity remain unverified.
       </p>
       <h2>Evidence</h2>
       <p>
-        The local repository includes fictional fixtures, expected values,
+        The GitHub repository includes fictional fixtures, expected values,
         evaluations, automated tests and docs/test-results.md. Only executed
         checks are reported there. Login details remain private.
       </p>
       <p>
-        <a href="/evidence/test-results.md">Executed test results</a> ·{" "}
+        <a href="https://github.com/mrabishekraj2004-cpu/flowops-portfolio">
+          GitHub source
+        </a>{" "}
+        · <a href="/evidence/test-results.md">Executed test results</a> ·{" "}
         <a href="/evidence/evaluation-results.json">Mock evaluation data</a> ·{" "}
         <a href="/evidence/automation.md">Automation design</a>
       </p>
