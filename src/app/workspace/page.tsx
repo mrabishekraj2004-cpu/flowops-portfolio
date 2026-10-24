@@ -751,7 +751,10 @@ function Upload({
       <div className="dropzone">
         <FileUp size={35} />
         <h2>The document starts here.</h2>
-        <p>Selectable-text PDF · Up to 4 MB hosted / 5 MB local · Maximum 10 pages</p>
+        <p>
+          Selectable-text PDF · Up to 4 MB hosted / 5 MB local · Maximum 10
+          pages
+        </p>
         <label>
           Choose PDF
           <input
@@ -891,6 +894,13 @@ function Review({
                 : "REVIEW REQUIRED"}
             </span>
           </div>
+          {r.extractionProvider?.startsWith("mock") && (
+            <p className="muted">
+              Deterministic mock; no AI or OCR. It reads supported labels and
+              simple item rows. Unfamiliar layouts, missing fields and
+              conflicting labels need manual review against the original PDF.
+            </p>
+          )}
           {r.state === "PROCESSING_FAILED" && (
             <p className="alert danger">
               Processing failed. You can enter the quotation manually, or ask an
@@ -1068,7 +1078,28 @@ function Review({
           ) : (
             r.currentData && (
               <p className="alert success">
-                Stored validation passed. Human review is still required.
+                {(
+                  {
+                    COMPLETED:
+                      "Human review and approvals complete. Notification delivered.",
+                    APPROVED: r.purchase?.outbox.some(
+                      (event) => event.state === "FAILED",
+                    )
+                      ? "Human review and approvals complete. Notification delivery failed; check the run history."
+                      : "Human review and approvals complete. Notification delivery is pending.",
+                    PENDING_APPROVAL:
+                      "Human review saved. Waiting for independent approval.",
+                    CHANGES_REQUESTED:
+                      "Changes requested. Update and review before resubmitting.",
+                    REJECTED:
+                      "Request rejected. No further approval is pending.",
+                  } as Record<string, string>
+                )[r.state] ??
+                  (r.revisions.some(
+                    (revision) => revision.version === r.version,
+                  )
+                    ? "Stored validation passed. Review saved; ready to submit for independent approval."
+                    : "Stored validation passed. Compare the proposals with the PDF and save your review.")}
               </p>
             )
           )}

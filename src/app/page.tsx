@@ -115,9 +115,9 @@ export default function Home() {
           claimed.
         </p>
         <p>
-          Local demonstration: deterministic extraction is labelled as mock.
-          Live AI is optional and unverified without provider credentials. No
-          public deployment is claimed.
+          Public portfolio demo hosted on Vercel with private PostgreSQL storage
+          and durable processing. Extraction uses a deterministic mock, not AI.
+          Live AI is optional and remains unverified.
         </p>
         <a href="/case-study">Read the implementation and limitations →</a>
       </section>

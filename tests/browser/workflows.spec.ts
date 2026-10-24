@@ -159,7 +159,7 @@ test("browser upload, evidence review, independent approval, notification and re
       .click();
     await page
       .getByLabel("Choose PDF")
-      .setInputFiles("fixtures/pdfs/clean.pdf");
+      .setInputFiles("fixtures/pdfs/labelled-fields.pdf");
     const title = "Browser quotation " + Date.now();
     await page.getByLabel("Request title").fill(title);
     await page
@@ -175,6 +175,26 @@ test("browser upload, evidence review, independent approval, notification and re
       "Cedar Office Supplies",
       { timeout: 90000 },
     );
+    await expect(page.getByLabel("Quotation reference")).toHaveValue(
+      "REVIEW-2026-001",
+    );
+    await expect(page.getByLabel("Quotation date")).toHaveValue("2026-10-24");
+    await expect(page.getByLabel("Description", { exact: true })).toHaveValue(
+      "Training notebooks",
+    );
+    await expect(page.getByLabel("Quantity", { exact: true })).toHaveValue("2");
+    await expect(page.getByLabel("Unit price", { exact: true })).toHaveValue(
+      "1000.00",
+    );
+    await expect(page.getByLabel("Line total", { exact: true })).toHaveValue(
+      "2000.00",
+    );
+    await expect(page.getByLabel("Grand total", { exact: true })).toHaveValue(
+      "2000.00",
+    );
+    await expect(
+      page.getByText(/Deterministic mock; no AI or OCR/),
+    ).toBeVisible();
     await page
       .getByText("Show field evidence and original proposals", { exact: true })
       .click();
@@ -228,6 +248,15 @@ test("browser upload, evidence review, independent approval, notification and re
     await expect(review.getByText("Completed", { exact: true })).toBeVisible({
       timeout: 60000,
     });
+    await expect(
+      review.getByText(
+        "Human review and approvals complete. Notification delivered.",
+        { exact: true },
+      ),
+    ).toBeVisible();
+    await expect(
+      review.getByText("Human review is still required.", { exact: false }),
+    ).toHaveCount(0);
     const data = await (
       await admin.request.get(base + "/api/requests/" + requestId)
     ).json();
@@ -311,4 +340,17 @@ test("sign-in does not put passwords in URLs when JavaScript is unavailable", as
   } finally {
     await context.close();
   }
+});
+
+test("homepage accurately describes the deployed mock demo", async ({
+  page,
+}) => {
+  await page.goto(base);
+  await expect(
+    page.getByText(/Public portfolio demo hosted on Vercel/),
+  ).toBeVisible();
+  await expect(page.getByText(/No public deployment is claimed/)).toHaveCount(
+    0,
+  );
+  await expect(page.getByText(/deterministic mock, not AI/)).toBeVisible();
 });

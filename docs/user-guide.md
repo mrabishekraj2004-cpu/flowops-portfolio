@@ -26,3 +26,7 @@ Original comparison: Source text shows actual selectable text/page numbers from 
 
 ## Hosted demo
 Open https://flowops-portfolio.vercel.app. Use the privately supplied hosted account details; local passwords are different. Requester uploads and reviews; the assigned reviewer signs in separately to approve; two reviewers are needed at/above the configured LKR 100,000 threshold. The administrator login stays private. Hosted selectable-text PDFs are at most 4 MB, ten pages and 24,000 characters. The portfolio uses the deterministic mock provider and fictional suppliers.
+
+## Review status and mock labels
+Completed requests confirm that human review/approvals are complete and the notification was delivered. Pending approval means review is saved and independent decisions are outstanding. A saved valid review is ready to submit; initial valid proposals still need comparison and a saved human review.
+Mock-v2 recognizes the supported scalar labels without case sensitivity, Date as a Quotation date alias, pipe item rows, and contiguous Item/Quantity/Unit Price/Line Total blocks. Check the PDF: unfamiliar layouts, missing/repeated labels and scanned pages still need manual entry. Existing reviewed records and original proposals are not reprocessed automatically.

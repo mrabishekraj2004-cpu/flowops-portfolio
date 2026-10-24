@@ -5,7 +5,7 @@ import { promisify } from "node:util";
 import path from "node:path";
 import { extract, type Page } from "../src/lib/providers";
 import { validate, type Quotation } from "../src/lib/quotation";
-const dataset = JSON.parse(await readFile("fixtures/expected-v1.json", "utf8"));
+const dataset = JSON.parse(await readFile("fixtures/expected-v2.json", "utf8"));
 const results = [];
 for (const c of dataset.cases) {
   try {
@@ -47,7 +47,7 @@ for (const c of dataset.cases) {
 }
 const measured = results.flatMap((r) => r.fields ?? []);
 const report = {
-  datasetVersion: 1,
+  datasetVersion: dataset.version,
   runAt: new Date().toISOString(),
   provider: process.env.EXTRACTION_PROVIDER ?? "mock",
   fieldChecks: measured.length,

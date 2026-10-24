@@ -16,3 +16,6 @@ Run relevant checks before future changes, update documentation/evidence, scan a
 
 ## Resolved setup issues
 Neon terms initially remained unrecorded; the user later supplied Terms Accepted and integration provisioning succeeded. The first Vercel build used the OneDrive-specific output folder and failed packaging; .next on Vercel resolved it. Workflow transitive Zod/Undici advisories were fixed within their existing major versions using package overrides. The local output cache remains .flowops-runtime.
+
+## Current follow-up: three reported portfolio defects
+Homepage deployment copy and state-specific review guidance corrected. Mock-v2 supports the exact reported title-case/Date/separate-item-label format without guessing. 16 core tests passed and dataset-v2 evaluation passed 24/24 selected fields, 9/9 outcomes. Existing v1 dataset and original reviewed records are preserved. Local production build passed; four live browser regressions are pending; do not claim follow-up release complete until verified.

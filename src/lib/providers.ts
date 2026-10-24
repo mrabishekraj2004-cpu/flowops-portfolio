@@ -6,72 +6,100 @@ export interface ExtractionProvider {
   extract(pages: Page[], signal: AbortSignal): Promise<Extraction>;
 }
 export const mockProvider: ExtractionProvider = {
-  name: "mock-v1 (deterministic labels; not AI)",
+  name: "mock-v2 (deterministic labels; not AI)",
   async extract(pages, signal) {
     signal.throwIfAborted();
     const data = structuredClone(blank);
     const evidence: Extraction["evidence"] = [];
-    const seen=new Set<string>();
-    const labels: Record<string, string> = {
-      Supplier: "supplier",
-      "Quotation reference": "reference",
-      "Quotation date": "date",
-      Currency: "currency",
-      Subtotal: "subtotal",
-      Tax: "tax",
-      "Grand total": "grandTotal",
+    const seen = new Set<string>();
+    const labels: Record<
+      string,
+      | "supplier"
+      | "reference"
+      | "date"
+      | "currency"
+      | "subtotal"
+      | "tax"
+      | "grandTotal"
+    > = {
+      supplier: "supplier",
+      "quotation reference": "reference",
+      "quotation date": "date",
+      date: "date",
+      currency: "currency",
+      subtotal: "subtotal",
+      tax: "tax",
+      "grand total": "grandTotal",
+    };
+    const itemLabels: Record<string, "quantity" | "unitPrice" | "lineTotal"> = {
+      quantity: "quantity",
+      "unit price": "unitPrice",
+      "line total": "lineTotal",
+    };
+    let activeItem: number | null = null;
+    const remember = (field: string, page: number, excerpt: string) => {
+      if (seen.has(field)) {
+        const previous = evidence.findIndex((e) => e.field === field);
+        if (previous >= 0) evidence.splice(previous, 1);
+        return false;
+      }
+      seen.add(field);
+      evidence.push({ field, page, excerpt: excerpt.slice(0, 300) });
+      return true;
     };
     for (const p of pages) {
       for (const line of p.text.split("\n").map((s) => s.trim())) {
-        for (const [label, key] of Object.entries(labels)) {
-          if (line.startsWith(label + ":")) {
-            const value = line.slice(label.length + 1).trim();
-            if (seen.has(key)) {
-              (data as Record<string, unknown>)[key] = null;
-              continue;
-            }
-            seen.add(key);
-            (data as Record<string, unknown>)[key] = value || null;
-            evidence.push({
-              field: key,
-              page: p.page,
-              excerpt: line.slice(0, 300),
-            });
-          }
+        signal.throwIfAborted();
+        if (!line) continue;
+        const match = /^([^:]+):\s*(.*)$/.exec(line);
+        if (!match) {
+          activeItem = null;
+          continue;
         }
-        if (line.startsWith("Item:")) {
-          const values = line
-            .slice(5)
-            .split("|")
-            .map((s) => s.trim());
-          if (values.length === 4) {
-            const index = data.items.length;
-            data.items.push({
-              description: values[0],
-              quantity: values[1],
-              unitPrice: values[2],
-              lineTotal: values[3],
-            });
-            for (const field of [
-              "description",
-              "quantity",
-              "unitPrice",
-              "lineTotal",
-            ])
-              evidence.push({
-                field: "items." + index + "." + field,
-                page: p.page,
-                excerpt: line.slice(0, 300),
-              });
-          }
+        const label = match[1].trim().replace(/\s+/g, " ").toLowerCase();
+        const value = match[2].trim();
+        const scalar = Object.hasOwn(labels, label) ? labels[label] : undefined;
+        if (scalar) {
+          data[scalar] = remember(scalar, p.page, line) ? value || null : null;
+          activeItem = null;
+          continue;
         }
+        if (label === "item") {
+          activeItem = null;
+          const values = value.split("|").map((s) => s.trim());
+          if (values.length !== 1 && values.length !== 4) continue;
+          const index = data.items.length;
+          data.items.push({
+            description: values[0] || null,
+            quantity: values[1] || null,
+            unitPrice: values[2] || null,
+            lineTotal: values[3] || null,
+          });
+          const fields =
+            values.length === 4
+              ? ["description", "quantity", "unitPrice", "lineTotal"]
+              : ["description"];
+          for (const field of fields)
+            remember("items." + index + "." + field, p.page, line);
+          if (values.length === 1) activeItem = index;
+          continue;
+        }
+        const itemField = Object.hasOwn(itemLabels, label)
+          ? itemLabels[label]
+          : undefined;
+        if (activeItem !== null && itemField) {
+          const field = "items." + activeItem + "." + itemField;
+          data.items[activeItem][itemField] = remember(field, p.page, line)
+            ? value || null
+            : null;
+        } else activeItem = null;
       }
     }
     return extractionSchema.parse({
       data,
       evidence,
       summary:
-        "Deterministic sample parser. Values are proposals; review against the original PDF.",
+        "Deterministic mock, not AI. Supports case-insensitive known labels, Date/Quotation date, pipe item rows and contiguous Item/Quantity/Unit Price/Line Total blocks. Unknown layouts, missing or conflicting fields require manual review; no OCR or inferred values.",
     });
   },
 };

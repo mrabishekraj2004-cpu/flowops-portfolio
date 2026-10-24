@@ -555,3 +555,73 @@ test("hosted private database storage is shared, validates keys and supports ext
     else process.env.STORAGE_DRIVER = before;
   }
 });
+
+test("mock labelled fields preserve literal evidence without guessing or ambiguous assignments", async () => {
+  const text =
+    "Supplier: Demo Office Supplies\nQuotation Reference: REVIEW-2026-001\nDate: 2026-10-24\nCurrency: LKR\nItem: Training notebooks\nQuantity: 2\nUnit Price: 1000.00\nLine Total: 2000.00\nSubtotal: 2000.00\nTax: 0.00\nGrand Total: 2000.00";
+  const parsed = await extract([{ page: 1, text }], AbortSignal.timeout(1000));
+  assert.match(parsed.provider, /mock-v2/);
+  assert.equal(parsed.result.data.reference, "REVIEW-2026-001");
+  assert.equal(parsed.result.data.date, "2026-10-24");
+  assert.equal(parsed.result.data.grandTotal, "2000.00");
+  assert.deepEqual(parsed.result.data.items, [
+    {
+      description: "Training notebooks",
+      quantity: "2",
+      unitPrice: "1000.00",
+      lineTotal: "2000.00",
+    },
+  ]);
+  assert.deepEqual(validate(parsed.result.data), []);
+  for (const e of parsed.result.evidence) {
+    assert.equal(e.page, 1);
+    assert.ok(e.excerpt && text.includes(e.excerpt));
+  }
+  const mixed = await extract(
+    [
+      {
+        page: 2,
+        text: "supplier : Vendor\nQUOTATION   REFERENCE : ABC\nquotation date: 2026-10-24\nITEM: A\nQUANTITY: 1\nUNIT PRICE: 3.00\nLINE TOTAL: 3.00\nItem: B\nQuantity: 2\nUnit Price: 4.00\nLine Total: 8.00",
+      },
+    ],
+    AbortSignal.timeout(1000),
+  );
+  assert.equal(mixed.result.data.reference, "ABC");
+  assert.equal(mixed.result.data.items.length, 2);
+  assert.equal(mixed.result.data.items[1].lineTotal, "8.00");
+  const ambiguous = await extract(
+    [
+      {
+        page: 1,
+        text: "Date: 2026-10-24\nQuotation Date: 2026-10-25\nItem: A\nQuantity: 1\nQuantity: 2\nUnit Price: 3.00\nGrand Total: 3.00\nGrand total: 4.00",
+      },
+    ],
+    AbortSignal.timeout(1000),
+  );
+  assert.equal(ambiguous.result.data.date, null);
+  assert.equal(ambiguous.result.data.grandTotal, null);
+  assert.equal(ambiguous.result.data.items[0].quantity, null);
+  assert.equal(ambiguous.result.data.items[0].lineTotal, null);
+  for (const field of [
+    "date",
+    "grandTotal",
+    "items.0.quantity",
+    "items.0.lineTotal",
+  ])
+    assert.equal(
+      ambiguous.result.evidence.find((e) => e.field === field)?.page,
+      null,
+    );
+  const orphan = await extract(
+    [
+      {
+        page: 1,
+        text: "Quantity: 9\nUnit Price: 5.00\nItem: A\nUnknown layout or instructions\nQuantity: 7\nconstructor: ignored\n__proto__: ignored\nLine Total: 35.00",
+      },
+    ],
+    AbortSignal.timeout(1000),
+  );
+  assert.equal(orphan.result.data.items.length, 1);
+  assert.equal(orphan.result.data.items[0].quantity, null);
+  assert.equal(orphan.result.data.items[0].lineTotal, null);
+});

@@ -102,7 +102,7 @@ Use `npm run build` then `npm start` for a local production build. Keep the work
 
 ## Limitations
 
-Mock parsing supports the labelled fictional fixtures; arbitrary PDF layouts require manual correction or the optional live provider. Selectable text only, up to 4 MB hosted / 5 MB local, ten pages and 24,000 text characters. Money is nonnegative decimal, at most two places; quantities allow six. Half-up rounding is applied per line before summing. LKR only.
+Mock-v2 supports case-insensitive known labels, Date/Quotation date, pipe-separated Item rows and contiguous Item/Quantity/Unit Price/Line Total blocks. Unfamiliar layouts and missing/conflicting fields require manual correction; it uses no AI or OCR and does not infer values. Existing original proposals and saved reviews are preserved. Selectable text only, up to 4 MB hosted / 5 MB local, ten pages and 24,000 text characters. Money is nonnegative decimal, at most two places; quantities allow six. Half-up rounding is applied per line before summing. LKR only.
 
 No shared production rate-limit store, antivirus/CDR, OCR, email/password reset delivery, account provisioning UI, live AI validation, independent security review, load test is claimed. The role controls protect actions; hidden buttons are not authorization. See [security](docs/security.md) before any real-user deployment.
 

@@ -96,6 +96,43 @@ export const scenarios = [
     valid: true,
   },
 ];
+scenarios.push({
+  id: "labelled-fields",
+  pages: [
+    [
+      "FICTIONAL QUOTATION - LABELLED FIELD REGRESSION",
+      "Supplier: Cedar Office Supplies",
+      "Quotation Reference: REVIEW-2026-001",
+      "Date: 2026-10-24",
+      "Currency: LKR",
+      "Item: Training notebooks",
+      "Quantity: 2",
+      "Unit Price: 1000.00",
+      "Line Total: 2000.00",
+      "Subtotal: 2000.00",
+      "Tax: 0.00",
+      "Grand Total: 2000.00",
+    ],
+  ],
+  expected: {
+    supplier: "Cedar Office Supplies",
+    reference: "REVIEW-2026-001",
+    date: "2026-10-24",
+    currency: "LKR",
+    items: [
+      {
+        description: "Training notebooks",
+        quantity: "2",
+        unitPrice: "1000.00",
+        lineTotal: "2000.00",
+      },
+    ],
+    subtotal: "2000.00",
+    tax: "0.00",
+    grandTotal: "2000.00",
+  },
+  valid: true,
+});
 export async function makePdf(pages: string[][]) {
   const pdf = await PDFDocument.create();
   const font = await pdf.embedFont(StandardFonts.Helvetica);
@@ -128,10 +165,10 @@ export async function fixtures() {
   for (const s of scenarios)
     await writeFile("fixtures/pdfs/" + s.id + ".pdf", await makePdf(s.pages));
   await writeFile(
-    "fixtures/expected-v1.json",
+    "fixtures/expected-v2.json",
     JSON.stringify(
       {
-        version: 1,
+        version: 2,
         reviewMethod:
           "Expected labels and arithmetic manually specified against the fictional source lines in scripts/fixtures.ts; not live AI outputs.",
         cases: scenarios,
@@ -149,7 +186,7 @@ export async function fixtures() {
     "%PDF-1.7\nnot a valid document",
   );
   console.log(
-    "Generated eight fictional PDFs plus malformed and unsupported samples.",
+    "Generated nine fictional PDFs plus malformed and unsupported samples.",
   );
 }
 if (process.argv[1]?.replaceAll("\\", "/").endsWith("/scripts/fixtures.ts"))
