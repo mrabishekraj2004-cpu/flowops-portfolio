@@ -1,0 +1,144 @@
+{
+  "datasetVersion": 1,
+  "runAt": "2026-10-24T12:35:12.624Z",
+  "provider": "mock",
+  "fieldChecks": 16,
+  "correctFieldChecks": 16,
+  "validationCases": 8,
+  "correctValidationCases": 8,
+  "liveVerified": false,
+  "results": [
+    {
+      "case": "clean",
+      "provider": "mock-v1 (deterministic labels; not AI)",
+      "fields": [
+        {
+          "field": "supplier",
+          "correct": true
+        },
+        {
+          "field": "reference",
+          "correct": true
+        },
+        {
+          "field": "date",
+          "correct": true
+        },
+        {
+          "field": "currency",
+          "correct": true
+        },
+        {
+          "field": "items",
+          "correct": true
+        },
+        {
+          "field": "subtotal",
+          "correct": true
+        },
+        {
+          "field": "tax",
+          "correct": true
+        },
+        {
+          "field": "grandTotal",
+          "correct": true
+        }
+      ],
+      "validationCorrect": true,
+      "issues": []
+    },
+    {
+      "case": "missing",
+      "provider": "mock-v1 (deterministic labels; not AI)",
+      "fields": [
+        {
+          "field": "reference",
+          "correct": true
+        }
+      ],
+      "validationCorrect": true,
+      "issues": [
+        "reference: required."
+      ]
+    },
+    {
+      "case": "arithmetic",
+      "provider": "mock-v1 (deterministic labels; not AI)",
+      "fields": [
+        {
+          "field": "grandTotal",
+          "correct": true
+        }
+      ],
+      "validationCorrect": true,
+      "issues": [
+        "grandTotal: does not equal subtotal plus tax."
+      ]
+    },
+    {
+      "case": "multi-page",
+      "provider": "mock-v1 (deterministic labels; not AI)",
+      "fields": [
+        {
+          "field": "grandTotal",
+          "correct": true
+        },
+        {
+          "field": "supplier",
+          "correct": true
+        }
+      ],
+      "validationCorrect": true,
+      "issues": []
+    },
+    {
+      "case": "ambiguous",
+      "provider": "mock-v1 (deterministic labels; not AI)",
+      "fields": [
+        {
+          "field": "supplier",
+          "correct": true
+        }
+      ],
+      "validationCorrect": true,
+      "issues": [
+        "supplier: required."
+      ]
+    },
+    {
+      "case": "scanned",
+      "provider": "mock",
+      "rejected": true,
+      "validationCorrect": true
+    },
+    {
+      "case": "prompt-injection",
+      "provider": "mock-v1 (deterministic labels; not AI)",
+      "fields": [
+        {
+          "field": "grandTotal",
+          "correct": true
+        },
+        {
+          "field": "supplier",
+          "correct": true
+        }
+      ],
+      "validationCorrect": true,
+      "issues": []
+    },
+    {
+      "case": "high-value",
+      "provider": "mock-v1 (deterministic labels; not AI)",
+      "fields": [
+        {
+          "field": "grandTotal",
+          "correct": true
+        }
+      ],
+      "validationCorrect": true,
+      "issues": []
+    }
+  ]
+}

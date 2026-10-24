@@ -1,0 +1,262 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String       @id
+  name          String
+  email         String       @unique
+  emailVerified Boolean      @default(false)
+  image         String?
+  role          String       @default("REQUESTER")
+  active        Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  requests      Request[]
+  assignments   Assignment[]
+  decisions     Decision[]
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  active   Boolean   @default(true)
+  requests Request[]
+}
+
+model Policy {
+  id                 String   @id @default("main")
+  baseCurrency       String   @default("LKR")
+  threshold          Decimal  @db.Decimal(18, 2)
+  reviewerIds        Json
+  webhookUrl         String?
+  simulationFailures Int      @default(0)
+  updatedAt          DateTime @updatedAt
+}
+
+model Request {
+  id                 String       @id @default(cuid())
+  number             Int          @unique @default(autoincrement())
+  ownerId            String
+  owner              User         @relation(fields: [ownerId], references: [id])
+  categoryId         String
+  category           Category     @relation(fields: [categoryId], references: [id])
+  title              String
+  state              String       @default("DRAFT")
+  version            Int          @default(1)
+  originalName       String
+  storageKey         String       @unique
+  sha256             String
+  size               Int
+  originalExtraction Json?
+  extractionProvider String?
+  pageText           Json?
+  currentData        Json?
+  validation         Json?
+  requiredApprovals  Int          @default(0)
+  submittedVersion   Int?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  revisions          Revision[]
+  assignments        Assignment[]
+  decisions          Decision[]
+  events             Audit[]
+  jobs               Job[]
+  purchase           Purchase?
+
+  @@index([ownerId, createdAt])
+  @@index([state])
+}
+
+model Revision {
+  id        String   @id @default(cuid())
+  requestId String
+  request   Request  @relation(fields: [requestId], references: [id])
+  version   Int
+  actorId   String
+  data      Json
+  issues    Json
+  reason    String
+  createdAt DateTime @default(now())
+
+  @@unique([requestId, version])
+}
+
+model Assignment {
+  id         String  @id @default(cuid())
+  requestId  String
+  request    Request @relation(fields: [requestId], references: [id])
+  reviewerId String
+  reviewer   User    @relation(fields: [reviewerId], references: [id])
+  version    Int
+
+  @@unique([requestId, reviewerId, version])
+}
+
+model Decision {
+  id         String   @id @default(cuid())
+  requestId  String
+  request    Request  @relation(fields: [requestId], references: [id])
+  reviewerId String
+  reviewer   User     @relation(fields: [reviewerId], references: [id])
+  version    Int
+  action     String
+  reason     String
+  createdAt  DateTime @default(now())
+
+  @@unique([requestId, reviewerId, version])
+}
+
+model Purchase {
+  id        String   @id @default(cuid())
+  number    Int      @unique @default(autoincrement())
+  requestId String   @unique
+  request   Request  @relation(fields: [requestId], references: [id])
+  version   Int
+  currency  String
+  total     Decimal  @db.Decimal(18, 2)
+  snapshot  Json
+  createdAt DateTime @default(now())
+  outbox    Outbox[]
+}
+
+model Audit {
+  id        String   @id @default(cuid())
+  requestId String?
+  request   Request? @relation(fields: [requestId], references: [id])
+  actorId   String
+  stage     String
+  detail    String
+  createdAt DateTime @default(now())
+
+  @@index([requestId, createdAt])
+}
+
+model Job {
+  id          String       @id @default(cuid())
+  key         String       @unique
+  type        String
+  requestId   String
+  request     Request      @relation(fields: [requestId], references: [id])
+  state       String       @default("QUEUED")
+  attempts    Int          @default(0)
+  maxAttempts Int          @default(3)
+  availableAt DateTime     @default(now())
+  leaseUntil  DateTime?
+  leaseToken  String?
+  lastError   String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  attemptsLog JobAttempt[]
+
+  @@index([state, availableAt])
+}
+
+model JobAttempt {
+  id         String    @id @default(cuid())
+  jobId      String
+  job        Job       @relation(fields: [jobId], references: [id])
+  attempt    Int
+  state      String
+  detail     String
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+}
+
+model Outbox {
+  id          String     @id @default(cuid())
+  eventId     String     @unique
+  purchaseId  String
+  purchase    Purchase   @relation(fields: [purchaseId], references: [id])
+  destination String
+  state       String     @default("QUEUED")
+  attempts    Int        @default(0)
+  maxAttempts Int        @default(4)
+  availableAt DateTime   @default(now())
+  leaseUntil  DateTime?
+  leaseToken  String?
+  lastError   String?
+  createdAt   DateTime   @default(now())
+  deliveries  Delivery[]
+
+  @@index([state, availableAt])
+}
+
+model Delivery {
+  id        String   @id @default(cuid())
+  eventId   String
+  outboxId  String
+  outbox    Outbox   @relation(fields: [outboxId], references: [id])
+  status    Int?
+  outcome   String
+  createdAt DateTime @default(now())
+}
+
+model ReceiverEvent {
+  eventId    String   @id
+  payload    Json
+  receivedAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  userId    String
+  message   String
+  requestId String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}

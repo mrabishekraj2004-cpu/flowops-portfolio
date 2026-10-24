@@ -1,0 +1,2 @@
+import {mkdir,readFile,writeFile} from "node:fs/promises";
+await mkdir("public/evidence",{recursive:true});for(const name of ["test-results.md","architecture.md","automation.md","ai-evaluation.md","security.md","evaluation-results.json"]){const content=await readFile("docs/"+name,"utf8");await writeFile("public/evidence/"+name,content);}console.log("Published allowlisted non-sensitive project evidence.");

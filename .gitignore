@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.env*
+!.env.example
+.local/
+src/generated/
+*.log
+*.tsbuildinfo
+test-results/
+playwright-report/
+
+.runtime-build/
+
+.flowops-runtime/

@@ -1,0 +1,9 @@
+node_modules/
+.next/
+.local/
+src/generated/
+fixtures/pdfs/
+
+.runtime-build/
+
+.flowops-runtime/

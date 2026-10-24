@@ -1,0 +1,60 @@
+{
+  "name": "flowops",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack --hostname 127.0.0.1 --port 3100",
+    "build": "prisma generate && node scripts/publish-evidence.mjs && next build --webpack",
+    "start": "next start --hostname 127.0.0.1 --port 3100",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "node --max-old-space-size=160 --max-semi-space-size=2 --wasm-lazy-compilation --liftoff-only --wasm-num-compilation-tasks=1 --import tsx scripts/test.ts",
+    "test:e2e": "node scripts/run-browser-tests.mjs",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:local": "node --max-old-space-size=128 --max-semi-space-size=2 --wasm-lazy-compilation --liftoff-only --wasm-num-compilation-tasks=1 --import tsx scripts/local-db.ts",
+    "worker": "tsx scripts/worker.ts",
+    "fixtures": "tsx scripts/fixtures.ts",
+    "evaluate": "tsx scripts/evaluate.ts",
+    "prebuild": "node scripts/prepare-runtime.mjs",
+    "predev": "node scripts/prepare-runtime.mjs",
+    "prestart": "node scripts/prepare-runtime.mjs"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "better-auth": "^1.7.12",
+    "decimal.js": "10.6.0",
+    "dotenv": "^18.0.9",
+    "lucide-react": "^1.61.0",
+    "next": "^16.4.2",
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "6.4.299",
+    "pg": "^8.23.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
+    "@electric-sql/pglite-socket": "^0.2.14",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.5",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.2",
+    "prettier": "^3.9.10",
+    "prisma": "^7.10.1",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  }
+}
