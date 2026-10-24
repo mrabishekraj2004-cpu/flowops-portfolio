@@ -15,3 +15,8 @@ playwright-report/
 
 .vercel
 .env*
+/.swc
+
+.agents/skills/
+skills-lock.json
+.workflow-data/

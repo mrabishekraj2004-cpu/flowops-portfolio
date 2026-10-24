@@ -260,3 +260,9 @@ model Notification {
 
   @@index([userId])
 }
+
+model PrivateDocument {
+  key String @id
+  bytes Bytes
+  createdAt DateTime @default(now())
+}

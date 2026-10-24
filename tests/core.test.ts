@@ -531,3 +531,27 @@ await test("provider failure retries safely and manual entry cannot be overwritt
 });
 
 await db.$disconnect();
+
+test("hosted private database storage is shared, validates keys and supports extraction", async () => {
+  const { storage } = await import("../src/lib/storage");
+  const before = process.env.STORAGE_DRIVER;
+  process.env.STORAGE_DRIVER = "postgres";
+  try {
+    const pdf = await readFile("fixtures/pdfs/clean.pdf");
+    const saved = await storage.put(pdf);
+    assert.deepEqual(await storage.get(saved.key), pdf);
+    await assert.rejects(() => storage.get("../outside.pdf"));
+    await assert.rejects(() => storage.put(Buffer.from("not a PDF")));
+    const request = await start();
+    await tick();
+    assert.equal(
+      (await detail(accounts.requester.id, request.id))?.state,
+      "NEEDS_REVIEW",
+    );
+    await storage.remove(saved.key);
+    await assert.rejects(() => storage.get(saved.key));
+  } finally {
+    if (before === undefined) delete process.env.STORAGE_DRIVER;
+    else process.env.STORAGE_DRIVER = before;
+  }
+});

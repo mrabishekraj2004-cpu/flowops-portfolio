@@ -10,6 +10,7 @@ export default defineConfig([
     ".flowops-runtime/**",
     ".local/**",
     "src/generated/**",
+    "src/app/.well-known/workflow/**",
     "test-results/**",
     "playwright-report/**",
   ]),

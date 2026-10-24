@@ -751,7 +751,7 @@ function Upload({
       <div className="dropzone">
         <FileUp size={35} />
         <h2>The document starts here.</h2>
-        <p>Selectable-text PDF · Up to 5 MB · Maximum 10 pages</p>
+        <p>Selectable-text PDF · Up to 4 MB hosted / 5 MB local · Maximum 10 pages</p>
         <label>
           Choose PDF
           <input

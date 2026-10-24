@@ -4,7 +4,9 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import path from "node:path";
 import { extract, type Page, type ExtractionProvider } from "./providers";
-import { privateFilePath } from "./storage";
+import { privateFilePath, storage } from "./storage";
+import { mkdtemp, writeFile, unlink, rmdir } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { validate } from "./quotation";
 import { Prisma } from "../generated/prisma/client";
 import { deliver } from "./webhooks";
@@ -116,14 +118,28 @@ export async function processExtraction(
       throw Error("Requester's account is not eligible for processing.");
     if (job.request.state !== "PROCESSING")
       throw Error("Request is no longer processing.");
-    const result = await execute(
-      process.execPath,
-      [
-        path.resolve("src/lib/extract-child.mjs"),
-        privateFilePath(job.request.storageKey),
-      ],
-      { timeout: 25000, maxBuffer: 200000, windowsHide: true },
-    );
+    let temporary: string | undefined;
+    let inputPath = privateFilePath(job.request.storageKey);
+    if (process.env.STORAGE_DRIVER === "postgres") {
+      temporary = await mkdtemp(path.join(tmpdir(), "flowops-pdf-"));
+      inputPath = path.join(temporary, "input.pdf");
+      await writeFile(inputPath, await storage.get(job.request.storageKey), {
+        mode: 0o600,
+      });
+    }
+    let result;
+    try {
+      result = await execute(
+        process.execPath,
+        [path.resolve("src/lib/extract-child.mjs"), inputPath],
+        { timeout: 25000, maxBuffer: 200000, windowsHide: true },
+      );
+    } finally {
+      if (temporary) {
+        await unlink(inputPath).catch(() => {});
+        await rmdir(temporary).catch(() => {});
+      }
+    }
     const pages: Page[] = JSON.parse(result.stdout);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 30000);

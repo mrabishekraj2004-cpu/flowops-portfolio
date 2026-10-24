@@ -4,7 +4,7 @@ AI-assisted quotation processing and independent approval for a fictional organi
 
 ## Status
 
-Separate project at `../FlowOps`; HelpDeskFlow is unchanged. Working local document-to-approval workflow verified; see [progress](docs/progress.md) and [executed verification](docs/test-results.md). No FlowOps remote repository or public deployment has been created. Live AI is optional and unverified. Deterministic mock results are not AI accuracy claims.
+Separate project at `../FlowOps`; HelpDeskFlow is unchanged. Working local document-to-approval workflow verified; see [progress](docs/progress.md) and [executed verification](docs/test-results.md). Source: https://github.com/mrabishekraj2004-cpu/flowops-portfolio. A separate Vercel project and free Neon database are provisioned; live deployment verification is in progress. Live AI is optional and unverified. Deterministic mock results are not AI accuracy claims.
 
 ## Actual screenshots
 
@@ -102,6 +102,6 @@ Use `npm run build` then `npm start` for a local production build. Keep the work
 
 ## Limitations
 
-Mock parsing supports the labelled fictional fixtures; arbitrary PDF layouts require manual correction or the optional live provider. Selectable text only, up to 5 MB, ten pages and 24,000 text characters. Money is nonnegative decimal, at most two places; quantities allow six. Half-up rounding is applied per line before summing. LKR only.
+Mock parsing supports the labelled fictional fixtures; arbitrary PDF layouts require manual correction or the optional live provider. Selectable text only, up to 4 MB hosted / 5 MB local, ten pages and 24,000 text characters. Money is nonnegative decimal, at most two places; quantities allow six. Half-up rounding is applied per line before summing. LKR only.
 
 No shared production rate-limit store, antivirus/CDR, OCR, email/password reset delivery, account provisioning UI, live AI validation, independent security review, load test or hosted worker verification is claimed. The role controls protect actions; hidden buttons are not authorization. See [security](docs/security.md) before any real-user deployment.

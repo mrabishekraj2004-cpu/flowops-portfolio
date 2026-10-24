@@ -6,7 +6,7 @@ export default defineConfig({
   fullyParallel: false,
   reporter: "list",
   use: {
-    baseURL: "http://127.0.0.1:3100",
+    baseURL: process.env.FLOWOPS_TEST_URL ?? "http://127.0.0.1:3100",
     actionTimeout: 30000,
     trace: "off",
     screenshot: "off",

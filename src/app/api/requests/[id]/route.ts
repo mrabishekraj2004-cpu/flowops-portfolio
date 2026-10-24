@@ -1,3 +1,4 @@
+import { wakeWorker } from "@/lib/hosted";
 import { detail, edit, submit, decide } from "@/lib/service";
 import { respond, identity, body } from "@/lib/http";
 import { AppError } from "@/lib/access";
@@ -11,6 +12,10 @@ export const PATCH = (r: Request, c: Context) =>
       requestId = (await c.params).id;
     if (v.action === "edit") return edit(id, requestId, v.input);
     if (v.action === "submit") return submit(id, requestId);
-    if (v.action === "decide") return decide(id, requestId, v.input);
+    if (v.action === "decide") {
+      const result = await decide(id, requestId, v.input);
+      await wakeWorker();
+      return result;
+    }
     throw new AppError(400, "Unknown action.");
   });

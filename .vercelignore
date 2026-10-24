@@ -1,0 +1,14 @@
+.git/
+.local/
+.env*
+.agents/
+skills-lock.json
+node_modules/
+.next/
+.runtime-build/
+.flowops-runtime/
+test-results/
+playwright-report/
+*.log
+*.tsbuildinfo
+.workflow-data/

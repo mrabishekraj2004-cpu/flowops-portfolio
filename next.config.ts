@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
+import { withWorkflow } from "workflow/next";
 const config: NextConfig = {
   distDir: ".flowops-runtime",
+  outputFileTracingIncludes: {
+    "/*": [
+      "./src/lib/extract-child.mjs",
+      "./node_modules/pdfjs-dist/legacy/build/**",
+      "./node_modules/pdfjs-dist/package.json",
+      "./node_modules/@napi-rs/canvas/**",
+      "./node_modules/@napi-rs/canvas-linux-x64-gnu/**",
+    ],
+  },
   serverExternalPackages: ["pdfjs-dist"],
   async headers() {
     return [
@@ -15,4 +25,4 @@ const config: NextConfig = {
     ];
   },
 };
-export default config;
+export default withWorkflow(config);

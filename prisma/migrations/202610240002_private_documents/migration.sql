@@ -1,0 +1,1 @@
+CREATE TABLE "PrivateDocument" ("key" TEXT PRIMARY KEY, "bytes" BYTEA NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "private_document_size" CHECK (octet_length("bytes") BETWEEN 8 AND 5242880));

@@ -5,9 +5,12 @@ import {
   type BrowserContext,
 } from "@playwright/test";
 import { readFile } from "node:fs/promises";
-const base = "http://127.0.0.1:3100";
+const base = process.env.FLOWOPS_TEST_URL ?? "http://127.0.0.1:3100";
 const accounts = JSON.parse(
-  await readFile(".local/credentials.json", "utf8"),
+  await readFile(
+    process.env.FLOWOPS_CREDENTIAL_FILE ?? ".local/credentials.json",
+    "utf8",
+  ),
 ) as Record<string, { id: string; email: string; password: string }>;
 test.setTimeout(180000);
 const production = process.env.FLOWOPS_E2E_PRODUCTION === "true";

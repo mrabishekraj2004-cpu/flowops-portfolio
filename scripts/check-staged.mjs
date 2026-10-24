@@ -33,6 +33,30 @@ if (existsSync(".local"))
       for (const a of Object.values(JSON.parse(readFileSync(p, "utf8"))))
         secrets.push(a.password);
   }
+for (const file of [
+  ".local/hosted-credentials.json",
+  ".local/hosted-config.json",
+]) {
+  if (!existsSync(file)) continue;
+  const values = JSON.parse(readFileSync(file, "utf8"));
+  for (const [key, value] of Object.entries(values)) {
+    if (typeof value === "object" && value && "password" in value)
+      secrets.push(value.password);
+    if (key.endsWith("SECRET") && typeof value === "string")
+      secrets.push(value);
+  }
+}
+if (existsSync(".local/production.env")) {
+  const env = parse(readFileSync(".local/production.env"));
+  for (const key of ["POSTGRES_PASSWORD", "PGPASSWORD"])
+    if (env[key]) secrets.push(env[key]);
+  for (const key of ["DATABASE_URL", "DATABASE_URL_UNPOOLED"]) {
+    try {
+      const pw = new URL(env[key]).password;
+      if (pw) secrets.push(decodeURIComponent(pw));
+    } catch {}
+  }
+}
 const hash = createHash("sha256");
 for (const p of paths) {
   assert.ok(

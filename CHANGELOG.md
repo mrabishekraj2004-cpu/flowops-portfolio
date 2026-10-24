@@ -18,3 +18,9 @@ Verification status is in docs/test-results.md. No public deployment or live AI 
 - Added original parsed-text/PDF review choices and actual inspected screenshots.
 - Added OneDrive-safe test discovery and dedicated generated runtime output.
 - Final evidence: 14 core tests, 3 production HTTP/browser checks, explicit typecheck/lint/build, zero known audit findings and mock-only evaluation. Public hosting and live extraction remain unverified.
+
+## Hosting preparation — 2026-10-24
+- Published the separate FlowOps repository and linked its own Vercel project.
+- Provisioned a free Neon database; explicit user-approved migration and fictional account setup completed.
+- Added private PostgreSQL PDF storage, temporary parser input cleanup, Vercel Workflow dispatch and daily protected recovery. Hosted upload limit is 4 MB to fit platform request limits; local limit remains 5 MB.
+- Type checking and 15 isolated core tests passed, including private database storage and extraction. Live release verification pending.
