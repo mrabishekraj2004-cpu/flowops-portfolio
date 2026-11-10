@@ -42,16 +42,14 @@ export default function CaseStudy() {
       <h2>Evidence</h2>
       <p>
         The GitHub repository includes fictional fixtures, expected values,
-        evaluations, automated tests and docs/test-results.md. Only executed
-        checks are reported there. Login details remain private.
+        evaluations and automated tests. Login details remain private.
       </p>
       <p>
         <a href="https://github.com/mrabishekraj2004-cpu/flowops-portfolio">
           GitHub source
         </a>{" "}
-        · <a href="/evidence/test-results.md">Executed test results</a> ·{" "}
-        <a href="/evidence/evaluation-results.json">Mock evaluation data</a> ·{" "}
-        <a href="/evidence/automation.md">Automation design</a>
+        ·{" "}
+        <a href="/evidence/evaluation-results.json">Mock evaluation data</a>
       </p>
       <Link className="button" href="/login">
         Open workspace
